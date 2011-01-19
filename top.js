@@ -23,7 +23,7 @@ npm.load({ outfd : null }, function () {
         var limit = process.argv[2] || 15;
         var start = 0;
         
-        if (!process.argv[2].match(/^\d+$/)) {
+        if (!limit.toString().match(/^\d+$/)) {
             var who = process.argv[2];
             start = sorted.indexOf(who);
             limit = 1;
