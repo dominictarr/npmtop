@@ -2,7 +2,6 @@ var npm = require('npm');
 var Hash = require('traverse/hash');
 var sprintf = require('sprintf').sprintf;
 
-var limit = process.argv[2] || 15;
 npm.load({ outfd : null }, function () {
     npm.commands.list(['latest'], function (err, pkgs) {
         var authors = {};
@@ -15,19 +14,33 @@ npm.load({ outfd : null }, function () {
         console.log('rank   percent   packages   author');
         console.log('----   -------   --------   ------');
         
+        var sorted = Object.keys(authors)
+            .sort(function (a,b) {
+                return authors[b] - authors[a]
+            })
+        ;
+        
+        var limit = process.argv[2] || 15;
+        var start = 0;
+        
+        if (!process.argv[2].match(/^\d+$/)) {
+            var who = process.argv[2];
+            start = Math.max(sorted.indexOf(who), 0);
+            limit = 1;
+        }
+        
         Object.keys(authors)
             .sort(function (a,b) {
                 return authors[b] - authors[a]
             })
-            .slice(0, limit)
+            .slice(start, start + limit)
             .forEach(function (name, rank) {
                 var percent = (authors[name] / total) * 100;
                 console.log(sprintf(
                     '# %2d    %.2f %%    %4d      %s',
-                    rank + 1, percent, authors[name], name
+                    rank + start + 1, percent, authors[name], name
                 ));
             })
         ;
     });
-})
-
+});
