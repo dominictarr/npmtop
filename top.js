@@ -25,14 +25,11 @@ npm.load({ outfd : null }, function () {
         
         if (!process.argv[2].match(/^\d+$/)) {
             var who = process.argv[2];
-            start = Math.max(sorted.indexOf(who), 0);
+            start = sorted.indexOf(who);
             limit = 1;
         }
         
-        Object.keys(authors)
-            .sort(function (a,b) {
-                return authors[b] - authors[a]
-            })
+        sorted
             .slice(start, start + limit)
             .forEach(function (name, rank) {
                 var percent = (authors[name] / total) * 100;
