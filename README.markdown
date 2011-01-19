@@ -24,3 +24,5 @@ As of 2011-01-19:
     # 15    0.98 %       9      cloudhead
 
 Thanks Hackers... Thackers.
+
+![npmtop!](http://substack.net/images/npmtop.png)
