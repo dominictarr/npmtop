@@ -16,7 +16,7 @@ npm.load({ outfd : null }, function () {
         
         var sorted = Object.keys(authors)
             .sort(function (a,b) {
-                return authors[b] - authors[a]
+                return authors[b] - authors[a] || (a.toLowerCase() < b.toLowerCase() ? -1 : 1)
             })
         ;
         
@@ -29,14 +29,23 @@ npm.load({ outfd : null }, function () {
             limit = 1;
         }
         
+        var fairRank = 1;
+        var lastVal = -1;
         sorted
             .slice(start, start + limit)
             .forEach(function (name, rank) {
                 var percent = (authors[name] / total) * 100;
+
+                if(authors[name] == lastVal)
+                  rank = fairRank;
+
                 console.log(sprintf(
                     '# %2d    %.2f %%    %4d      %s',
-                    rank + start + 1, percent, authors[name], name
+                   rank + start + 1 , percent, authors[name], name
                 ));
+
+               lastVal = authors[name];
+               fairRank = rank;
             })
         ;
     });
